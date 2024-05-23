@@ -1,0 +1,148 @@
+@font-face {
+  font-family: custom-verdana;
+  src: url("../font/verdana/verdana.ttf");
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+}
+@media screen and (min-width: 1024px) {
+  html {
+    font-size: 14px;
+  }
+}
+@media screen and (min-width: 1280px) {
+  html {
+    font-size: 15px;
+  }
+}
+@media screen and (min-width: 1440px) {
+  html {
+    font-size: 16px;
+  }
+}
+@media screen and (min-width: 1600px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+body {
+  font-family: custom-verdana, Helvetica, sans-serif;
+  font-size: 1rem;
+  background-color: #0f0f0f;
+  color: #fff;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.todo-container {
+  max-width: 1200px;
+  width: 95%;
+  padding-top: 1rem;
+  margin: 0 auto;
+}
+.todo-container h1 {
+  text-align: center;
+}
+.todo-container .common-wrapper {
+  max-width: 900px;
+  min-width: 120px;
+  width: 100%;
+  margin: 0 auto;
+}
+.todo-container input#task,
+.todo-container input#editTask {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #f0f0f0;
+}
+.todo-container input#task:focus, .todo-container input#task:focus-visible,
+.todo-container input#editTask:focus,
+.todo-container input#editTask:focus-visible {
+  border-color: transparent;
+  outline: 1px solid cornflowerblue;
+}
+.todo-container h1,
+.todo-container input#task,
+.todo-container input#editTask {
+  margin-bottom: 1rem;
+}
+
+.task-list {
+  list-style-type: none;
+  max-width: 900px;
+  width: 100%;
+}
+
+.task-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: row nowrap;
+  margin-bottom: 0.5rem;
+}
+.task-list li .task-content-container {
+  display: flex;
+  align-items: flex-start;
+  flex-flow: row nowrap;
+  width: 100%;
+}
+.task-list li .task-content-container input[type=checkbox] {
+  margin-top: 5px;
+  margin-right: 0.5rem;
+}
+.task-list li .task-content-container .task-text {
+  display: inline-block;
+  width: 100%;
+}
+.task-list li .task-content-container .task-text span {
+  display: inline-block;
+  vertical-align: top;
+}
+.task-list li .task-content-container .task-text span:first-child {
+  max-width: 30px;
+  width: 100%;
+}
+.task-list li .task-content-container .task-text span:last-child {
+  max-width: calc(100% - 38px);
+  width: 100%;
+}
+.task-list li .task-icon-container {
+  white-space: nowrap;
+}
+.task-list li .task-icon-container img {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(245deg) brightness(105%) contrast(105%);
+  margin-right: 0.5rem;
+}
+.task-list li .task-icon-container img:last-child {
+  margin-right: 0;
+}
+
+.task-list li.striked-list span:last-child {
+  text-decoration-style: solid;
+  text-decoration-line: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #ccc;
+}
+
+.task-list li img {
+  cursor: pointer;
+}

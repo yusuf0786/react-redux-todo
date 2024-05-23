@@ -1,0 +1,17 @@
+@mixin todoComponentSpacing($mb) {
+    margin-bottom: $mb;
+}
+
+@mixin inputProps() {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #f0f0f0;
+
+    &:focus,
+    &:focus-visible {
+        border-color: transparent;
+        outline: 1px solid cornflowerblue;
+    }
+}
