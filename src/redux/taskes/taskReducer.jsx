@@ -1,6 +1,6 @@
 import { Add_Task, Delete_Task } from "./taskActionTypes";
 
-const initialState = JSON.parse(localStorage.getItem("taskState")).length > 0 ? JSON.parse(localStorage.getItem("taskState")) : [];
+const initialState = JSON.parse(localStorage.getItem("taskState")) ? JSON.parse(localStorage.getItem("taskState")) : [];
 // localStorage.setItem("taskState", JSON.stringify(initialState));
 
 const taskReducer = (state = initialState, action) => {
