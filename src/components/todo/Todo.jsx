@@ -25,23 +25,20 @@ const Todo = () => {
     const dispatch = useDispatch()
     const userFetchData = useSelector(state => state?.taskAPI?.userTodos)
     const userFullData = useSelector(state => state?.task?.userTodos)
-
+    
     // on windowload
     useEffect(() => {
-      function windowLoad() {
-        console.log("window loaded");
-        inputTaskRef?.current.focus()
+      inputTaskRef?.current.focus()
+      
+      dispatch(fetchTodos())
 
-        dispatch(fetchTodos())
-        dispatch(addFetchedTaskTodo(userFetchData))
-      }
-  
+      const windowLoad = () => console.log("window loaded");
       window.addEventListener('load', windowLoad)
       return () => window.removeEventListener('load', windowLoad)
     }, [])
 
     useEffect(() => {
-      
+      userFetchData && dispatch(addFetchedTaskTodo(userFetchData));
     },[userFetchData])
 
     // Function to get random number of items from array
@@ -80,7 +77,7 @@ const Todo = () => {
     }
     
     const handleTaskCheck = (id) => {
-      if(id) dispatch(checkTaskTodo(id))
+      id && dispatch(checkTaskTodo(id))
     }
   
     const handleTaskDelete = (id) => {
