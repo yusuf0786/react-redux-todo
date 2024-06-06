@@ -1,4 +1,11 @@
-import { Add_Task, Check_Task, Delete_Task, Edit_Task} from "./taskActionTypes"
+import { Add_FETCHED_Task, Add_Task, Check_Task, Delete_Task, Edit_Task} from "./taskActionTypes"
+
+export const addFetchedTaskTodo = (data) => {
+    return {
+        type: Add_FETCHED_Task,
+        payload: data
+    }
+}
 
 export const addTaskTodo = (task, id) => {
     return {

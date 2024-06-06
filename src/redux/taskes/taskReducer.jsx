@@ -1,10 +1,10 @@
-import { Add_Task, Delete_Task, Check_Task} from "./taskActionTypes";
+import { Add_Task, Delete_Task, Check_Task, Add_FETCHED_Task} from "./taskActionTypes";
 
 JSON.parse(localStorage.getItem("taskState")) && JSON.parse(localStorage.getItem("taskState")).length > 0 ? localStorage.removeItem("taskState") : null
 
-let initialState = JSON.parse(localStorage.getItem("taskAPIState")) ? JSON.parse(localStorage.getItem("taskAPIState")) : {};
-initialState = {...initialState, userTodos: initialState?.userTodos?.filter(item => item?.userId === 1)}
+let initialState = JSON.parse(localStorage.getItem("taskState")) ? JSON.parse(localStorage.getItem("taskState")) : {};
 
+// Function to get random number of items from array
 const getRandomItems = (array, numItems) => {
     const randomItems = [];
     const arrayCopy = array?.slice(); // Create a copy of the original array
@@ -18,10 +18,24 @@ const getRandomItems = (array, numItems) => {
     return randomItems;
 }
 
+initialState = {...initialState, userTodos: initialState?.userTodos?.filter(item => item?.userId === 1)}
 initialState = {...initialState, userTodos: getRandomItems(initialState?.userTodos, 10)}
 
 const taskReducer = (state = initialState, action) => {
     switch (action.type) {
+        case Add_FETCHED_Task: {
+            let newState = {
+                userTodos: [
+                    ...action?.payload
+                ],
+            }
+            newState = {...newState, userTodos: newState?.userTodos?.filter(item => item?.userId === 1)}
+            newState = {...newState, userTodos: getRandomItems(newState?.userTodos, 10)}
+            localStorage.setItem("taskState", JSON.stringify(newState))
+            return newState
+        }
+        break;
+
         case Add_Task: {
             const newState = {
                 ...state,

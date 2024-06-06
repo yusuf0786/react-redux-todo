@@ -8,6 +8,7 @@ import deleteIcon from '../../assets/img/delete.svg'
 import editIcon from '../../assets/img/edit.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { InputCheck } from '../others/InputCheck'
+import { addFetchedTaskTodo } from '../../redux/taskes/taskActions'
 
 function getUID() {
     // Get the timestamp and convert it into alphanumeric input
@@ -32,11 +33,16 @@ const Todo = () => {
         inputTaskRef?.current.focus()
 
         dispatch(fetchTodos())
+        dispatch(addFetchedTaskTodo(userFetchData))
       }
   
       window.addEventListener('load', windowLoad)
       return () => window.removeEventListener('load', windowLoad)
     }, [])
+
+    useEffect(() => {
+      
+    },[userFetchData])
 
     // Function to get random number of items from array
     const getRandomItems = useCallback( (array, numItems) => {
