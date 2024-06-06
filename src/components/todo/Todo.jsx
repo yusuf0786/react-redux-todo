@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 // import actions
-import { addTaskTodo } from '../../redux'
+import { addTaskTodo, fetchTodos, checkTaskTodo } from '../../redux'
 import { deleteTaskTodo } from '../../redux'
 
 // images import
 import deleteIcon from '../../assets/img/delete.svg'
 import editIcon from '../../assets/img/edit.svg'
 import { useDispatch, useSelector } from 'react-redux';
+import { InputCheck } from '../others/InputCheck'
 
 function getUID() {
     // Get the timestamp and convert it into alphanumeric input
@@ -17,32 +18,48 @@ const Todo = () => {
     let id = getUID();
     const [taskInput, setTaskInput] = useState('')
     const [editTaskInput, setEditTaskInput] = useState('')
-    // const [taskList, setTaskList] = useState([{task:'Task',id:id}])
-    const [editOpen, setEditOpen] = useState(false)
     const inputTaskRef = useRef()
     const editInputTaskRef = useRef()
+    const [editOpen, setEditOpen] = useState(false)
     const dispatch = useDispatch()
-    const taskList = useSelector(state => state.task)
-  
+    const userFetchData = useSelector(state => state?.taskAPI?.userTodos)
+    const userFullData = useSelector(state => state?.task?.userTodos)
+
+    // on windowload
     useEffect(() => {
-  
       function windowLoad() {
         console.log("window loaded");
-        inputTaskRef.current.focus()
+        inputTaskRef?.current.focus()
+
+        dispatch(fetchTodos())
       }
   
       window.addEventListener('load', windowLoad)
-  
-      return () => {
-        window.removeEventListener('load', windowLoad)
-      }
+      return () => window.removeEventListener('load', windowLoad)
     }, [])
-  
+
+    // Function to get random number of items from array
+    const getRandomItems = useCallback( (array, numItems) => {
+      const randomItems = [];
+      const arrayCopy = array?.slice(); // Create a copy of the original array
+
+      // Generate random indices and push corresponding items into the result array
+      for (let i = 0; i < numItems; i++) {
+          const randomIndex = Math.floor(Math.random() * arrayCopy?.length);
+          if(!arrayCopy || !arrayCopy[randomIndex]) break;
+          randomItems.push(arrayCopy?.splice(randomIndex, 1)[0]); // Remove selected item from arrayCopy
+      }
+      return randomItems;
+    }, [userFullData])
+    
     const formSubmit = (e) => {
       e.preventDefault()
+      let isIncludes = false;
       if (taskInput === '') return
-      if (taskList.includes(taskInput)) return
-      // setTaskList(prevData => [...prevData, {task:taskInput, id: getUID()} ])
+      if (userFullData?.length > 0) {
+        isIncludes = userFullData?.some(d => d?.title === taskInput)
+      }
+      if (isIncludes) return
       dispatch(addTaskTodo(taskInput, getUID()))
       setTaskInput('')
     }
@@ -50,27 +67,24 @@ const Todo = () => {
     const editFormSubmit = (e) => {
       e.preventDefault()
       if (editTaskInput === '') return
-      if (taskList.includes(taskInput)) return
-      //   setTaskList(prevData => [...prevData, {task:editTaskInput, id: getUID()} ])
+      if (userFullData.includes(taskInput)) return
       dispatch(addTaskTodo(editTaskInput, getUID()))
       setEditTaskInput('')
       setEditOpen(false)
     }
     
-    const handleTaskCheck = (e) => {
-      e.target.checked ? e.target.parentNode.parentNode.classList.add("striked-list") : e.target.parentNode.parentNode.classList.remove("striked-list");
+    const handleTaskCheck = (id) => {
+      if(id) dispatch(checkTaskTodo(id))
     }
   
     const handleTaskDelete = (id) => {
-        //   setTaskList(prevData => taskList.filter(d => d.id !== id))
         dispatch(deleteTaskTodo(id))
     }
   
     const handleTaskEdit = useCallback((data) => {
       setEditOpen(true)
-      //   setTaskList(prevData => taskList.filter(d => d.id !== data.id))
       dispatch(deleteTaskTodo(data.id))
-      setEditTaskInput(data.task)
+      setEditTaskInput(data.title)
       setTimeout(() => { editInputTaskRef.current.focus() }, 0.1);
     }, [editOpen])
 
@@ -87,18 +101,17 @@ const Todo = () => {
                 </form>}
 
                 <ul className='task-list'>
+                {userFullData && userFullData.length > 0 && userFullData.map((d,i) => (
 
-                {taskList && taskList.map((d,i) => (
+                    <li key={d?.id}>
 
-                    <li key={d.id}>
-
-                  <div className="task-content-container">
-                    <input type="checkbox" onClick={(e) => handleTaskCheck(e)} />
-                    <p className="task-text"><span>{i+1}.</span> <span>{d.task}</span> </p>
-                  </div>
+                    <div className="task-content-container">
+                      <InputCheck inputChecked={ d?.completed ? true : false} optionalValueSend={d?.id} onClickFunction={handleTaskCheck}/>
+                      <p className="task-text"><span>{i+1}.</span> <span>{d?.title}</span> </p>
+                    </div>
 
                     {!editOpen && <div className="task-icon-container">
-                        <img className='delete-icon' width='18' src={deleteIcon} alt="delete icon" onClick={(e) => handleTaskDelete(d.id)} />
+                        <img className='delete-icon' width='18' src={deleteIcon} alt="delete icon" onClick={(e) => handleTaskDelete(d?.id)} />
                         <img className='edit-icon' width='18' src={editIcon} alt="edit icon" onClick={(e) => handleTaskEdit(d)} />
                     </div>}
 
